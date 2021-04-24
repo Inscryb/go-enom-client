@@ -2,6 +2,7 @@ package enom
 
 import (
 	"fmt"
+	"github.com/Inscryb/go-enom-client/requests"
 	"testing"
 )
 
@@ -38,6 +39,20 @@ func TestDomainCheck(t *testing.T) {
 
 	if domainCheck.IsAvailable() {
 		t.Errorf("DomainCheck = %v; want false", domainCheck)
+	}
+}
+
+func TestDomainNameSpinner(t *testing.T) {
+	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
+
+	req := requests.DomainNameSpinnerRequest{Domain: "inscryb.com"}
+	domainSpinner, err := session.DomainNameSpinner(req)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if domainSpinner.ErrCount > 0 {
+		t.Errorf("domain spinner contains errors")
 	}
 }
 
