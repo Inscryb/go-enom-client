@@ -2,9 +2,10 @@ package enom
 
 import (
 	"encoding/xml"
-	"github.com/Inscryb/go-enom-client/response"
-	_ "github.com/Inscryb/go-enom-client/response"
 	"strings"
+
+	"github.com/Inscryb/go-enom-client/request"
+	"github.com/Inscryb/go-enom-client/response"
 )
 
 func ParseDomain(domain string) (string, string) {
@@ -46,6 +47,38 @@ func (s Session) DomainCheck(domain string) (response.DomainCheck, error) {
 	}
 
 	return r.Domains[0].Domain, nil
+}
+
+// DomainCheck Check the availability of a domain name
+func (s Session) DomainNameSpinner(request request.DomainNameSpinnerRequest) (response.SpinnerResponse, error) {
+	resp := response.SpinnerResponse{}
+
+	sld, tld := ParseDomain(request.Domain)
+
+	cmd := s.CreateCommand("NameSpinner")
+	cmd.AddParam("sld", sld)
+	cmd.AddParam("tld", tld)
+	cmd.AddParam("tldlist", request.TLDList)
+
+	client := Client{&s}
+	data, err := client.DoRequest(cmd)
+	if err != nil {
+		return resp, err
+	}
+
+	type rDomain struct {
+		Domain response.DomainCheck `xml:"Domain"`
+	}
+	type domains struct {
+		response.Response
+		Domains []rDomain `xml:"Domains"`
+	}
+
+	if err = xml.Unmarshal(data, &resp); err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
 
 // DomainPurchase purchase a domain name
@@ -223,8 +256,8 @@ func (s Session) DomainInfo(domain string) (response.DomainInfo, error) {
 }
 
 // DomainContacts Get all contact data for a domain name
-func (s Session) DomainContacts(domain string) (response.SetContact, error) {
-	resp := response.SetContact{}
+func (s Session) DomainContacts(domain string) (response.Contacts, error) {
+	resp := response.Contacts{}
 
 	sld, tld := ParseDomain(domain)
 
@@ -246,8 +279,8 @@ func (s Session) DomainContacts(domain string) (response.SetContact, error) {
 }
 
 // DomainSetContact Update contact information for a domain name
-func (s Session) DomainSetContact(domain string, contactData map[string]string) (response.RegLock, error) {
-	resp := response.RegLock{}
+func (s Session) DomainSetContact(domain string, contactData map[string]string) (response.Contacts, error) {
+	resp := response.Contacts{}
 
 	sld, tld := ParseDomain(domain)
 
