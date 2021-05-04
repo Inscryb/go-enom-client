@@ -2,9 +2,10 @@ package enom
 
 import (
 	"encoding/xml"
+	"strings"
+
 	"github.com/Inscryb/go-enom-client/requests"
 	"github.com/Inscryb/go-enom-client/response"
-	"strings"
 )
 
 func ParseDomain(domain string) (string, string) {
@@ -46,6 +47,43 @@ func (s Session) DomainCheck(domain string) (response.DomainCheck, error) {
 	}
 
 	return r.Domains[0].Domain, nil
+}
+
+func (s Session) DomainTldList() (response.TldList, error) {
+	resp := response.TldList{}
+
+	cmd := s.CreateCommand("gettldlist")
+
+	client := Client{&s}
+	data, err := client.DoRequest(cmd)
+	if err != nil {
+		return resp, err
+	}
+
+	if err = xml.Unmarshal(data, &resp); err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+func (s Session) DomainTldDetails(tld string) (response.TldDetails, error) {
+	resp := response.TldDetails{}
+
+	cmd := s.CreateCommand("GetTLDDetails")
+	cmd.AddParam("tld", tld)
+
+	client := Client{&s}
+	data, err := client.DoRequest(cmd)
+	if err != nil {
+		return resp, err
+	}
+
+	if err = xml.Unmarshal(data, &resp); err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
 
 // DomainNameSpinner List related domain names

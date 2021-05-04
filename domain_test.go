@@ -42,6 +42,32 @@ func TestDomainCheck(t *testing.T) {
 	}
 }
 
+func TestDomainTldList(t *testing.T) {
+	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
+
+	resp, err := session.DomainTldList()
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.ErrCount > 0 {
+		t.Errorf("Domain TLD List contains errors")
+	}
+}
+
+func TestDomainTldDetails(t *testing.T) {
+	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
+
+	resp, err := session.DomainTldDetails("com")
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.ErrCount > 0 {
+		t.Errorf("Domain TLD List contains errors")
+	}
+}
+
 func TestDomainNameSpinner(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
