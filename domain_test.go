@@ -12,7 +12,7 @@ var (
 	DomainTestApiResellerPwd = "resellpw"
 )
 
-func TestDomainCheck(t *testing.T) {
+func TestCheck(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
 	domainCheck, err := session.DomainCheck("inscryb.com")
@@ -42,10 +42,10 @@ func TestDomainCheck(t *testing.T) {
 	}
 }
 
-func TestDomainTldList(t *testing.T) {
+func TestTldList(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
-	resp, err := session.DomainTldList()
+	resp, err := session.TldList()
 	if err != nil {
 		t.Error(err)
 	}
@@ -55,10 +55,10 @@ func TestDomainTldList(t *testing.T) {
 	}
 }
 
-func TestDomainTldDetails(t *testing.T) {
+func TestTldDetails(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
-	resp, err := session.DomainTldDetails("com")
+	resp, err := session.TldDetails("com")
 	if err != nil {
 		t.Error(err)
 	}
@@ -68,11 +68,11 @@ func TestDomainTldDetails(t *testing.T) {
 	}
 }
 
-func TestDomainNameSpinner(t *testing.T) {
+func TestNameSpinner(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
 	req := requests.DomainNameSpinnerRequest{Domain: "inscryb.com"}
-	domainSpinner, err := session.DomainNameSpinner(req)
+	domainSpinner, err := session.NameSpinner(req)
 	if err != nil {
 		t.Error(err)
 	}
@@ -82,10 +82,10 @@ func TestDomainNameSpinner(t *testing.T) {
 	}
 }
 
-func TestDomainPurchase(t *testing.T) {
+func TestPurchase(t *testing.T) {
 	session := CreateSession(DomainTestApiUrl, DomainTestApiResellerID, DomainTestApiResellerPwd)
 
-	domainPurchase, err := session.DomainPurchase(fmt.Sprint("inscryb-", RandomString(15), ".com"))
+	domainPurchase, err := session.Purchase(fmt.Sprint("inscryb-", RandomString(15), ".com"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -93,6 +93,6 @@ func TestDomainPurchase(t *testing.T) {
 	if domainPurchase.ResponseCode != 200 {
 		println("Error Reason -----")
 		println(domainPurchase.ResponseText)
-		t.Errorf("DomainPurchase = %v; want 200", domainPurchase.ResponseCode)
+		t.Errorf("Purchase = %v; want 200", domainPurchase.ResponseCode)
 	}
 }

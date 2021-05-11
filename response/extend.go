@@ -11,5 +11,5 @@ type Extend struct {
 	DomainName string `xml:"DomainName" json:"domain_name"`
 	OrderID    int    `xml:"OrderID"    json:"order_id"`
 
-	DomainInfo EDomainInfo `xml:"DomainInfo" json:"domain_info"`
+	DomainInfo EDomainInfo `xml:"Info" json:"domain_info"`
 }

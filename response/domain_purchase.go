@@ -5,7 +5,7 @@ type DomainPurchase struct {
 	OrderID           string             `xml:"OrderID" json:"order_id"`
 	OrderDelayed      bool               `xml:"OrderDelayed" json:"order_delayed"`
 	OrderStatus       string             `xml:"OrderStatus" json:"order_status"`
-	DomainInfo        DomainPurchaseInfo `xml:"DomainInfo" json:"domain_info"`
+	DomainInfo        DomainPurchaseInfo `xml:"Info" json:"domain_info"`
 	TotalCharged      float32            `xml:"TotalCharged" json:"total_charged"`
 	RegistrantPartyID string             `xml:"RegistrantPartyID"  json:"registrant_party_id"`
 }
